@@ -1,10 +1,12 @@
 import { Jost_400Regular, Jost_600SemiBold } from '@expo-google-fonts/jost';
+import { NavigationContainer } from '@react-navigation/native';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
-import { UserIdentification } from './src/screens/UserIdentification';
+import 'react-native-gesture-handler';
+import { AppRoutes } from './src/routes/stack.routes';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -19,7 +21,7 @@ export default function App() {
         setAppIsReady(true);
       }
     };
-    loadFonts()
+    loadFonts();
   }, []);
 
   const onLayout = useCallback(() => {
@@ -33,10 +35,11 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} onLayout={onLayout}>
-      {/* <Welcome /> */}
-      <UserIdentification />
-      <StatusBar />
-    </SafeAreaView>
+    <NavigationContainer>
+      <SafeAreaView style={{ flex: 1 }} onLayout={onLayout}>
+        <AppRoutes />
+        <StatusBar />
+      </SafeAreaView>
+    </NavigationContainer>
   );
 }
