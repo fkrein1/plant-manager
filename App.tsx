@@ -6,7 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import 'react-native-gesture-handler';
-import { AppRoutes } from './src/routes/stack.routes';
+import { Routes } from './src/routes';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -37,7 +37,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <SafeAreaView style={{ flex: 1 }} onLayout={onLayout}>
-        <AppRoutes />
+        <Routes />
         <StatusBar />
       </SafeAreaView>
     </NavigationContainer>

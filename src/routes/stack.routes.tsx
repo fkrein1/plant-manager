@@ -6,7 +6,7 @@ import { colors } from '../styles/colors';
 
 const Stack = createStackNavigator();
 
-export function AppRoutes() {
+export function StackRoutes() {
   return (
     <Stack.Navigator
       screenOptions={{
