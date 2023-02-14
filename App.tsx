@@ -1,31 +1,41 @@
-import {
-  Jost_400Regular,
-  Jost_600SemiBold,
-  useFonts,
-} from '@expo-google-fonts/jost';
+import { Jost_400Regular, Jost_600SemiBold } from '@expo-google-fonts/jost';
+import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
-import { Welcome } from './src/screens/Welcome';
-
-SplashScreen.preventAutoHideAsync();
+import { UserIdentification } from './src/screens/UserIdentification';
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
-    Jost_400Regular,
-    Jost_600SemiBold,
-  });
+  const [appIsReady, setAppIsReady] = useState(false);
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
+  useEffect(() => {
+    const loadFonts = async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        await Font.loadAsync({ Jost_400Regular, Jost_600SemiBold });
+      } catch {
+      } finally {
+        setAppIsReady(true);
+      }
+    };
+    loadFonts()
+  }, []);
+
+  const onLayout = useCallback(() => {
+    if (appIsReady) {
+      SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <Welcome />
+    <SafeAreaView style={{ flex: 1 }} onLayout={onLayout}>
+      {/* <Welcome /> */}
+      <UserIdentification />
       <StatusBar />
     </SafeAreaView>
   );
