@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Header } from '../components/Header';
 import { Loading } from '../components/Loading';
 import { PlantCardPrimary } from '../components/PlantCardPrimary';
@@ -13,19 +14,25 @@ interface EnviromentProps {
   title: string;
 }
 
-interface PlantProps {
-  id: string;
+export interface PlantProps {
+  id: number;
   name: string;
+  about: string;
+  water_tips: string;
   photo: string;
   rooms: string[];
+  frequency: {
+    times: number;
+    repeat_every: string;
+  };
 }
 
 export function PlantSelect() {
   const [rooms, setRooms] = useState<EnviromentProps[]>([]);
   const [plants, setPlants] = useState<PlantProps[]>([]);
   const [roomSelected, setRoomSelected] = useState('all');
-  const [loading, setLoading] = useState(true)
-
+  const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function getRooms() {
@@ -39,27 +46,29 @@ export function PlantSelect() {
     async function getPlants() {
       const { data } = await api.get('plants?_sort=name&_order=asc');
       setPlants(data);
-      setLoading(false)
+      setLoading(false);
     }
     getPlants();
   }, []);
+
 
   const filteredPlants =
     roomSelected === 'all'
       ? plants
       : plants.filter((plant) => plant.rooms.includes(roomSelected));
 
-  if(loading) {
-    return <Loading />
+  if (loading) {
+    return <Loading />;
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header />
       <Text style={styles.title}>Where in your house</Text>
       <Text style={styles.subTitle}>do you want to place your plant?</Text>
       <View style={styles.rooms}>
         <FlatList
           horizontal
+          keyExtractor={(item) => item.key}
           showsHorizontalScrollIndicator={false}
           data={rooms}
           renderItem={({ item }) => (
@@ -74,6 +83,7 @@ export function PlantSelect() {
       <View style={styles.plants}>
         <FlatList
           numColumns={2}
+          keyExtractor={(item) => String(item.id)}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ margin: 8 }} />}
           data={filteredPlants}
@@ -82,11 +92,14 @@ export function PlantSelect() {
               name={item.name}
               photo={item.photo}
               style={index % 2 == 0 && { marginRight: 16 }}
+              onPress={() =>
+                navigation.navigate('PlantSave', { id: String(item.id) })
+              }
             />
           )}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

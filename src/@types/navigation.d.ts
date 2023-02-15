@@ -3,8 +3,9 @@ export declare global {
     interface RootParamList {
       Welcome: undefined;
       UserIdentification: undefined;
-      Confirmation: undefined
-      PlantSelect: undefined
+      Confirmation: undefined;
+      PlantSelect: undefined;
+      PlantSave: {id: string}
     }
   }
 }
