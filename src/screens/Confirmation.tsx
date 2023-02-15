@@ -1,9 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from '../components/Button';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
 
 export function Confirmation() {
+  const navigation = useNavigation();
+
+  function handleStart() {
+    navigation.navigate('PlantSelect');
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.emoji}>😄</Text>
@@ -12,7 +18,7 @@ export function Confirmation() {
         Now let's start taking care of your little plants very carefully.
       </Text>
       <View style={styles.footer}>
-        <Button title="Start" />
+        <Button title="Start" onPress={handleStart} />
       </View>
     </View>
   );
