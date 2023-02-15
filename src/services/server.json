@@ -4,8 +4,9 @@
     { "key": "week", "title": "Every week" }
   ],
 
-  "plants_environments": [
+  "plants_rooms": [
     { "key": "living_room", "title": "Living Room" },
+    { "key": "garden", "title": "Garden" },
     { "key": "bedroom", "title": "Bedroom" },
     { "key": "kitchen", "title": "Kitchen" },
     { "key": "bathroom", "title": "Bathroom" }
