@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "server": "json-server ./src/services/server.json --port 3333"
+    "server": "json-server ./src/services/server.json --port 3333 --delay 700"
   },
   "dependencies": {
     "@expo-google-fonts/jost": "^0.2.2",
@@ -27,7 +27,8 @@
     "react-native-screens": "~3.18.0",
     "react-native-svg": "13.4.0",
     "react-native-svg-transformer": "^1.0.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "lottie-react-native": "5.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
