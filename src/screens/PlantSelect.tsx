@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Header } from '../components/Header';
+import { Loading } from '../components/Loading';
+import { PlantCardPrimary } from '../components/PlantCardPrimary';
 import { RoomButton } from '../components/RoomButton';
 import { api } from '../services/api';
 import { colors } from '../styles/colors';
@@ -10,26 +12,78 @@ interface EnviromentProps {
   key: string;
   title: string;
 }
+
+interface PlantProps {
+  id: string;
+  name: string;
+  photo: string;
+  rooms: string[];
+}
+
 export function PlantSelect() {
   const [rooms, setRooms] = useState<EnviromentProps[]>([]);
+  const [plants, setPlants] = useState<PlantProps[]>([]);
+  const [roomSelected, setRoomSelected] = useState('all');
+  const [loading, setLoading] = useState(true)
+
+
   useEffect(() => {
     async function getRooms() {
-      const { data } = await api.get('plants_rooms');
-      setRooms(data);
+      const { data } = await api.get('plants_rooms?_sort=title&_order=asc');
+      setRooms([{ key: 'all', title: 'All' }, ...data]);
     }
     getRooms();
   }, []);
+
+  useEffect(() => {
+    async function getPlants() {
+      const { data } = await api.get('plants?_sort=name&_order=asc');
+      setPlants(data);
+      setLoading(false)
+    }
+    getPlants();
+  }, []);
+
+  const filteredPlants =
+    roomSelected === 'all'
+      ? plants
+      : plants.filter((plant) => plant.rooms.includes(roomSelected));
+
+  if(loading) {
+    return <Loading />
+  }
   return (
     <View style={styles.container}>
       <Header />
       <Text style={styles.title}>Where in your house</Text>
       <Text style={styles.subTitle}>do you want to place your plant?</Text>
-      <View style={styles.list}>
+      <View style={styles.rooms}>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
           data={rooms}
-          renderItem={({ item }) => <RoomButton title={item.title} />}
+          renderItem={({ item }) => (
+            <RoomButton
+              title={item.title}
+              active={item.key === roomSelected}
+              onPress={() => setRoomSelected(item.key)}
+            />
+          )}
+        />
+      </View>
+      <View style={styles.plants}>
+        <FlatList
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={{ margin: 8 }} />}
+          data={filteredPlants}
+          renderItem={({ item, index }) => (
+            <PlantCardPrimary
+              name={item.name}
+              photo={item.photo}
+              style={index % 2 == 0 && { marginRight: 16 }}
+            />
+          )}
         />
       </View>
     </View>
@@ -53,7 +107,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.text,
     color: colors.heading,
   },
-  list: {
+  rooms: {
     marginTop: 24,
+  },
+  plants: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: 40,
   },
 });
