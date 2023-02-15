@@ -1,6 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -29,7 +31,11 @@ export function UserIdentification() {
     setIsFocused(false);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    if (name.length === 0) {
+      return Alert.alert('Please enter your name.');
+    }
+    await AsyncStorage.setItem('@plantmanager:user', name);
     navigation.navigate('Confirmation');
   }
 
