@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import {
   Dimensions,
   Image,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,7 +20,7 @@ export function Welcome() {
     
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
         Easily {'\n'} manage your {'\n'}plants
       </Text>
@@ -41,7 +42,7 @@ export function Welcome() {
           <Feather name="chevron-right" size={32} />{' '}
         </Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 

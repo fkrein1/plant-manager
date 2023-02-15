@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Button } from '../components/Button';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
@@ -11,7 +11,7 @@ export function Confirmation() {
     navigation.navigate('PlantSelect');
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.emoji}>😄</Text>
       <Text style={styles.heading}>We are ready!</Text>
       <Text style={styles.subtitle}>
@@ -20,7 +20,7 @@ export function Confirmation() {
       <View style={styles.footer}>
         <Button title="Start" onPress={handleStart} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
