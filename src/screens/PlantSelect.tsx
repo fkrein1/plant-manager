@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../components/Header';
 import { Loading } from '../components/Loading';
 import { PlantCardPrimary } from '../components/PlantCardPrimary';
@@ -43,50 +44,59 @@ export function PlantSelect() {
     return <Loading />;
   }
   return (
-    <SafeAreaView style={styles.container}>
-      <Header />
-      <Text style={styles.title}>Where in your house</Text>
-      <Text style={styles.subTitle}>do you want to place your plant?</Text>
-      <View style={styles.rooms}>
-        <FlatList
-          horizontal
-          keyExtractor={(item) => item.key}
-          showsHorizontalScrollIndicator={false}
-          data={rooms}
-          renderItem={({ item }) => (
-            <RoomButton
-              title={item.title}
-              active={item.key === roomSelected}
-              onPress={() => setRoomSelected(item.key)}
-            />
-          )}
-        />
-      </View>
-      <View style={styles.plants}>
-        <FlatList
-          numColumns={2}
-          keyExtractor={(item) => String(item.id)}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={{ margin: 8 }} />}
-          data={filteredPlants}
-          renderItem={({ item, index }) => (
-            <PlantCardPrimary
-              name={item.name}
-              photo={item.photo}
-              style={index % 2 == 0 && { marginRight: 16 }}
-              onPress={() => navigation.navigate('PlantSave', { plant: item })}
-            />
-          )}
-        />
+    <SafeAreaView style={styles.safeView}>
+      <View style={styles.container}>
+        <Header />
+        <Text style={styles.title}>Where in your house</Text>
+        <Text style={styles.subTitle}>do you want to place your plant?</Text>
+        <View style={styles.rooms}>
+          <FlatList
+            horizontal
+            keyExtractor={(item) => item.key}
+            showsHorizontalScrollIndicator={false}
+            data={rooms}
+            renderItem={({ item }) => (
+              <RoomButton
+                title={item.title}
+                active={item.key === roomSelected}
+                onPress={() => setRoomSelected(item.key)}
+              />
+            )}
+          />
+        </View>
+        <View style={styles.plants}>
+          <FlatList
+            numColumns={2}
+            keyExtractor={(item) => String(item.id)}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View style={{ margin: 8 }} />}
+            data={filteredPlants}
+            renderItem={({ item, index }) => (
+              <PlantCardPrimary
+                name={item.name}
+                photo={item.photo}
+                style={index % 2 == 0 && { marginRight: 16 }}
+                onPress={() =>
+                  navigation.navigate('PlantSave', { plant: item })
+                }
+              />
+            )}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeView: {
+    backgroundColor: colors.background,
+    flex: 1
+  },
   container: {
     flex: 1,
-    marginHorizontal: 32,
+    paddingHorizontal: 32,
+    backgroundColor: colors.background,
   },
   title: {
     fontSize: 18,

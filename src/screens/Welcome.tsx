@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import wateringImg from '../assets/watering.png';
 import { colors } from '../styles/colors';
@@ -17,7 +16,6 @@ export function Welcome() {
   const navigation = useNavigation();
   function handleStart() {
     navigation.navigate('UserIdentification');
-    
   }
   return (
     <SafeAreaView style={styles.container}>
