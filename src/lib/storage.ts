@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { IPlant } from '../services/getPlants';
 
-interface StoragePlant extends IPlant {
+export interface StoragePlant extends IPlant {
   dateTimeNotification: Date;
 }
 
@@ -25,7 +25,17 @@ export async function loadPlant() {
   try {
     const data = await AsyncStorage.getItem('@plantmanager:plants');
     const plants = data ? (JSON.parse(data) as StoragePlant[]) : [];
-    return plants;
+    const formatedPlants = plants
+      .map((plant) => ({
+        ...plant,
+        dateTimeNotification: new Date(plant.dateTimeNotification),
+      }))
+      .sort(
+        (a, b) =>
+          Math.floor(a.dateTimeNotification.getTime() / 1000) -
+          Math.floor(b.dateTimeNotification.getTime() / 1000),
+      );
+    return formatedPlants;
   } catch (err) {
     throw new Error(err);
   }
