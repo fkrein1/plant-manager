@@ -1,17 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, ViewBase } from 'react-native';
 import { Button } from '../components/Button';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
 
-export function Confirmation() {
+export function ConfirmLogin() {
   const navigation = useNavigation();
 
   function handleStart() {
     navigation.navigate('PlantSelect');
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.emoji}>😄</Text>
       <Text style={styles.heading}>We are ready!</Text>
       <Text style={styles.subtitle}>
@@ -20,7 +20,7 @@ export function Confirmation() {
       <View style={styles.footer}>
         <Button title="Start" onPress={handleStart} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.heading,
     fontFamily: fonts.text,
+
   },
   footer: {
     width: '100%',

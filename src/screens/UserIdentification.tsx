@@ -37,7 +37,7 @@ export function UserIdentification() {
     }
     try {
       await AsyncStorage.setItem('@plantmanager:user', name);
-      navigation.navigate('Confirmation');
+      navigation.navigate('ConfirmLogin');
     } catch {
       return Alert.alert('Unable to save your name.');
     }

@@ -53,7 +53,7 @@ export function PlantSave({}) {
     const plantStorage = { ...plant, dateTimeNotification: selectedDateTime };
     try {
       await savePlant(plantStorage);
-      navigation.navigate('PlantSelect');
+      navigation.navigate('ConfirmPlant');
     } catch {
       Alert.alert('Unable to save the plant. 🥲');
     }
