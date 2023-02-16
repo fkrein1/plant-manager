@@ -35,8 +35,12 @@ export function UserIdentification() {
     if (name.length === 0) {
       return Alert.alert('Please enter your name.');
     }
-    await AsyncStorage.setItem('@plantmanager:user', name);
-    navigation.navigate('Confirmation');
+    try {
+      await AsyncStorage.setItem('@plantmanager:user', name);
+      navigation.navigate('Confirmation');
+    } catch {
+      return Alert.alert('Unable to save your name.');
+    }
   }
 
   return (

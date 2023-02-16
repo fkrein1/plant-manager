@@ -1,42 +1,68 @@
-import { useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { format } from 'date-fns';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Image,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SvgFromUri } from 'react-native-svg';
 import waterDropImg from '../assets/waterdrop.png';
 import { Button } from '../components/Button';
-import { Loading } from '../components/Loading';
-import { api } from '../services/api';
+import { savePlant } from '../lib/storage';
+import { IPlant } from '../services/getPlants';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
-import { PlantProps } from './PlantSelect';
 
 interface Params {
-  id: string;
+  plant: IPlant;
 }
 
 export function PlantSave({}) {
-  const [plant, setPlant] = useState<PlantProps>();
-  const [loading, setLoading] = useState(true);
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
+  const navigation = useNavigation();
   const route = useRoute();
-  const { id } = route.params as Params;
+  const { plant } = route.params as Params;
 
-  useEffect(() => {
-    async function getPlant() {
-      const { data } = await api.get(`plants/${id}`);
-      console.log(data);
-      setPlant(data);
-      setLoading(false);
+  function handleChangeTime(
+    _: DateTimePickerEvent,
+    dateTime: Date | undefined,
+  ) {
+    if (Platform.OS === 'android') {
+      setShowDatePicker((prev) => !prev);
     }
-    getPlant();
-  }, []);
-
-  if (loading) {
-    return <Loading />;
+    if (dateTime) {
+      setSelectedDateTime(dateTime);
+    }
   }
+
+  function handleDatetimePickerAndroid() {
+    setShowDatePicker((prev) => !prev);
+  }
+
+  async function handleSavePlant() {
+    const plantStorage = { ...plant, dateTimeNotification: selectedDateTime };
+    try {
+      await savePlant(plantStorage);
+      navigation.navigate('PlantSelect');
+    } catch {
+      Alert.alert('Unable to save the plant. 🥲');
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.plant}>
-        <SvgFromUri uri={plant.photo} height={240} />
+        <SvgFromUri uri={plant.photo} height={200} />
         <Text style={styles.title}>{plant.name}</Text>
         <Text style={styles.description}>{plant.about}</Text>
       </View>
@@ -45,7 +71,31 @@ export function PlantSave({}) {
           <Image style={styles.image} source={waterDropImg} />
           <Text style={styles.tip}>{plant.water_tips}</Text>
         </View>
-        <Button title="Register Plant" onPress={() => {}} />
+        <Text style={styles.reminder}>
+          Choose the best time to be reminded:
+        </Text>
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDateTime}
+            mode="time"
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            onChange={handleChangeTime}
+          />
+        )}
+
+        {Platform.OS === 'android' && (
+          <TouchableOpacity
+            style={styles.timePickerBtn}
+            activeOpacity={0.7}
+            onPress={handleDatetimePickerAndroid}
+          >
+            <Text style={styles.timePicker}>{`Change ${format(
+              selectedDateTime,
+              'HH:mm',
+            )}  `}</Text>
+          </TouchableOpacity>
+        )}
+        <Button title="Register Plant" onPress={handleSavePlant} />
       </View>
     </SafeAreaView>
   );
@@ -57,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   plant: {
-    paddingTop:10,
+    paddingTop: 30,
     paddingBottom: 80,
     paddingHorizontal: 32,
     alignItems: 'center',
@@ -81,7 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 32,
     backgroundColor: colors.white,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     paddingBottom: 10,
   },
 
@@ -107,5 +157,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.blue,
     flex: 1,
+  },
+  reminder: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontFamily: fonts.text,
+    color: colors.heading,
+    marginTop: -15,
+  },
+
+  timePickerBtn: {
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+
+  timePicker: {
+    color: colors.heading,
+    fontSize: 24,
+    fontFamily: fonts.text,
   },
 });

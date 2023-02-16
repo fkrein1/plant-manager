@@ -5,52 +5,34 @@ import { Header } from '../components/Header';
 import { Loading } from '../components/Loading';
 import { PlantCardPrimary } from '../components/PlantCardPrimary';
 import { RoomButton } from '../components/RoomButton';
-import { api } from '../services/api';
+import { getPlants, IPlant } from '../services/getPlants';
+import { getRooms, IRooms } from '../services/getRooms';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
 
-interface EnviromentProps {
-  key: string;
-  title: string;
-}
-
-export interface PlantProps {
-  id: number;
-  name: string;
-  about: string;
-  water_tips: string;
-  photo: string;
-  rooms: string[];
-  frequency: {
-    times: number;
-    repeat_every: string;
-  };
-}
-
 export function PlantSelect() {
-  const [rooms, setRooms] = useState<EnviromentProps[]>([]);
-  const [plants, setPlants] = useState<PlantProps[]>([]);
+  const [rooms, setRooms] = useState<IRooms[]>([]);
+  const [plants, setPlants] = useState<IPlant[]>([]);
   const [roomSelected, setRoomSelected] = useState('all');
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
   useEffect(() => {
-    async function getRooms() {
-      const { data } = await api.get('plants_rooms?_sort=title&_order=asc');
+    async function fetchRooms() {
+      const data = await getRooms();
       setRooms([{ key: 'all', title: 'All' }, ...data]);
     }
-    getRooms();
+    fetchRooms();
   }, []);
 
   useEffect(() => {
-    async function getPlants() {
-      const { data } = await api.get('plants?_sort=name&_order=asc');
+    async function fetchPlants() {
+      const data = await getPlants();
       setPlants(data);
       setLoading(false);
     }
-    getPlants();
+    fetchPlants();
   }, []);
-
 
   const filteredPlants =
     roomSelected === 'all'
@@ -92,9 +74,7 @@ export function PlantSelect() {
               name={item.name}
               photo={item.photo}
               style={index % 2 == 0 && { marginRight: 16 }}
-              onPress={() =>
-                navigation.navigate('PlantSave', { id: String(item.id) })
-              }
+              onPress={() => navigation.navigate('PlantSave', { plant: item })}
             />
           )}
         />
