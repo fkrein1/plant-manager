@@ -40,3 +40,15 @@ export async function loadPlant() {
     throw new Error(err);
   }
 }
+
+export async function saveUser(name) {
+  await AsyncStorage.setItem('@plantmanager:user', name);
+}
+
+export async function loadUser() {
+  return await AsyncStorage.getItem('@plantmanager:user');
+}
+
+export async function deleteUser() {
+  return await AsyncStorage.removeItem('@plantmanager:user');
+}

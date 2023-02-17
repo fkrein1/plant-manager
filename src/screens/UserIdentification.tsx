@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import { Button } from '../components/Button';
+import { saveUser } from '../lib/storage';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
 
@@ -36,7 +37,7 @@ export function UserIdentification() {
       return Alert.alert('Please enter your name.');
     }
     try {
-      await AsyncStorage.setItem('@plantmanager:user', name);
+      await saveUser(name)
       navigation.navigate('ConfirmLogin');
     } catch {
       return Alert.alert('Unable to save your name.');

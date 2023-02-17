@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -9,14 +10,33 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import wateringImg from '../assets/watering.png';
+import { loadUser } from '../lib/storage';
 import { colors } from '../styles/colors';
 import { fonts } from '../styles/fonts';
 
 export function Welcome() {
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<string>();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function getUser() {
+      const user = await loadUser();
+      setUser(user);
+      setLoading(false);
+      if (user) navigation.navigate('PlantSelect');
+    }
+    getUser();
+  }, []);
+
   function handleStart() {
     navigation.navigate('UserIdentification');
   }
+
+  if (loading || user) {
+    return null;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
