@@ -9,6 +9,7 @@ import {
   Image,
   Platform,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -60,44 +61,50 @@ export function PlantSave({}) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.plant}>
-        <SvgFromUri uri={plant.photo} height={200} />
-        <Text style={styles.title}>{plant.name}</Text>
-        <Text style={styles.description}>{plant.about}</Text>
-      </View>
-      <View style={styles.controller}>
-        <View style={styles.tipContainer}>
-          <Image style={styles.image} source={waterDropImg} />
-          <Text style={styles.tip}>{plant.water_tips}</Text>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.plant}>
+          <SvgFromUri uri={plant.photo} height={200} />
+          <Text style={styles.title}>{plant.name}</Text>
+          <Text style={styles.description}>{plant.about}</Text>
         </View>
-        <Text style={styles.reminder}>
-          Choose the best time to be reminded:
-        </Text>
-        {showDatePicker && (
-          <DateTimePicker
-            value={selectedDateTime}
-            mode="time"
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            onChange={handleChangeTime}
-          />
-        )}
+        <View style={styles.controller}>
+          <View style={styles.tipContainer}>
+            <Image style={styles.image} source={waterDropImg} />
+            <Text style={styles.tip}>{plant.water_tips}</Text>
+          </View>
+          <Text style={styles.reminder}>
+            Choose the best time to be reminded:
+          </Text>
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDateTime}
+              mode="time"
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={handleChangeTime}
+            />
+          )}
 
-        {Platform.OS === 'android' && (
-          <TouchableOpacity
-            style={styles.timePickerBtn}
-            activeOpacity={0.7}
-            onPress={handleDatetimePickerAndroid}
-          >
-            <Text style={styles.timePicker}>{`Change ${format(
-              selectedDateTime,
-              'HH:mm',
-            )}  `}</Text>
-          </TouchableOpacity>
-        )}
-        <Button title="Register Plant" onPress={handleSavePlant} />
-      </View>
-    </SafeAreaView>
+          {Platform.OS === 'android' && (
+            <TouchableOpacity
+              style={styles.timePickerBtn}
+              activeOpacity={0.7}
+              onPress={handleDatetimePickerAndroid}
+            >
+              <Text style={styles.timePicker}>{`Change ${format(
+                selectedDateTime,
+                'HH:mm',
+              )}  `}</Text>
+            </TouchableOpacity>
+          )}
+          <Button
+            title="Register Plant"
+            onPress={handleSavePlant}
+            style={styles.confirmBtn}
+          />
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 
@@ -107,6 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   plant: {
+    backgroundColor: colors.shape,
     paddingTop: 30,
     paddingBottom: 80,
     paddingHorizontal: 32,
@@ -176,5 +184,8 @@ const styles = StyleSheet.create({
     color: colors.heading,
     fontSize: 24,
     fontFamily: fonts.text,
+  },
+  confirmBtn: {
+    marginTop: 10,
   },
 });
