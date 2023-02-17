@@ -22,7 +22,7 @@ export function AuthRoutes() {
       })}
     >
       <AppTab.Screen
-        name="Plant_Select"
+        name="Plant Select"
         component={PlantSelect}
         options={{
           tabBarIcon: ({ size, color }) => (
@@ -35,7 +35,7 @@ export function AuthRoutes() {
         }}
       />
       <AppTab.Screen
-        name="My_Plants"
+        name="My Plants"
         component={MyPlants}
         options={{
           tabBarIcon: ({ size, color }) => (
