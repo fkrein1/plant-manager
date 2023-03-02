@@ -4,10 +4,12 @@ export declare global {
       Welcome: undefined;
       UserIdentification: undefined;
       ConfirmLogin: undefined;
-      'Plant Select': undefined;
+      PlantSelect: undefined;
       PlantSave: { plant: {} };
       ConfirmPlant: undefined;
-      'My Plants': undefined;
+      MyPlants: undefined;
+      "Plant Select": undefined;
+
     }
   }
 }
