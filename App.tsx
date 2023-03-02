@@ -3,7 +3,6 @@ import {
   Jost_600SemiBold,
   useFonts,
 } from '@expo-google-fonts/jost';
-import { NavigationContainer } from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import { Routes } from './src/routes';
 
@@ -14,9 +13,5 @@ export default function App() {
     return null;
   }
 
-  return (
-    <NavigationContainer>
-      <Routes />
-    </NavigationContainer>
-  );
+  return <Routes />;
 }
