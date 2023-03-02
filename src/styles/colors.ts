@@ -16,4 +16,6 @@ export const colors = {
   blue_light: '#EBF6FF',
 
   red: '#E83F5B',
+  emoji_bg_light: 'rgba(196, 196, 196, 0.06)',
+  emoji_bg: 'rgba(196, 196, 196, 0.1)',
 };

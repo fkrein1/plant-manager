@@ -21,6 +21,16 @@ export async function savePlant(plant: StoragePlant) {
   }
 }
 
+export async function saveAllPlants(plants: StoragePlant[]) {
+  try {
+    await AsyncStorage.removeItem('@plantmanager:plants');
+
+    await AsyncStorage.setItem('@plantmanager:plants', JSON.stringify(plants));
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export async function loadPlant() {
   try {
     const data = await AsyncStorage.getItem('@plantmanager:plants');
@@ -32,8 +42,8 @@ export async function loadPlant() {
       }))
       .sort(
         (a, b) =>
-          Math.floor(a.dateTimeNotification.getTime() / 1000) -
-          Math.floor(b.dateTimeNotification.getTime() / 1000),
+          a.dateTimeNotification.getTime() -
+          b.dateTimeNotification.getTime(),
       );
     return formatedPlants;
   } catch (err) {
