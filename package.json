@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "server": "json-server ./src/services/server.json --port 3333 --delay 700"
+    "server": "json-server ./src/services/server.json --port 3333 --delay 300"
   },
   "dependencies": {
     "@expo-google-fonts/jost": "^0.2.2",
