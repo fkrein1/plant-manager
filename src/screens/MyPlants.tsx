@@ -40,6 +40,7 @@ export function MyPlants() {
   }
   const isPlantSaved = savedPlants.length !== 0;
 
+  console.log(savedPlants);
   return (
     <SafeAreaView style={styles.safeView}>
       <View style={styles.container}>
@@ -72,7 +73,9 @@ export function MyPlants() {
             <FlatList
               showsVerticalScrollIndicator={false}
               data={savedPlants}
-              keyExtractor={(item) => String(item.dateTimeNotification)}
+              keyExtractor={(item) =>
+                `${String(item.dateTimeNotification)}${item.name}`
+              }
               renderItem={({ item, index }) => (
                 <PlantCardSecondary
                   handleRemove={() => handleRemove(item.dateTimeNotification)}
